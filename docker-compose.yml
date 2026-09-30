@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  # 1. Ma'lumotlar bazasi (PostgreSQL)
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: rustam
+      POSTGRES_PASSWORD: my_secret_password
+      POSTGRES_DB: learning_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  # 2. n8n Avtomatlashtirish platformasi (Yangi qo'shildi)
+  n8n:
+    image: docker.n8n.io/n8nio/n8n
+    ports:
+      - "5678:5678"
+    environment:
+      - N8N_SECURE_COOKIE=false
+    depends_on:
+      - db
+
+volumes:
+  db_data:
